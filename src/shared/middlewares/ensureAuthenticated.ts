@@ -24,7 +24,7 @@ export async function ensureAuthenticated(request: FastifyRequest, reply: Fastif
     try {
         const decoded = jwt.verify(
             token,
-            env.JWT_SECRET,
+            env.JWT_ACCESS_SECRET,
         ) as JWTPayload;
 
         request.user = {

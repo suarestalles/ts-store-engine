@@ -10,7 +10,9 @@ const envSchema = z.object({
 
   PORT: z.coerce.number().default(3333),
 
-  JWT_SECRET: z.string().min(32),
+  JWT_ACCESS_SECRET: z.string().min(32),
+
+  JWT_REFRESH_SECRET: z.string().min(32),
 
   DATABASE_URL: z.string().startsWith("postgresql://")
 });

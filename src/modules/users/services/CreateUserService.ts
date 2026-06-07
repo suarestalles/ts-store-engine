@@ -1,13 +1,13 @@
 import { IUserRepository } from "../repositories/IUserRepository";
-import { CreateUserDTO }  from "../dtos/CreateUserDTO";
+import { UserCreateDTO }  from "../dtos/UserCreateDTO";
 import { AppError } from "../../../shared/errors/AppError";
 import bcrypt from "bcrypt";
 
 export class CreateUserService {
 
-    constructor(private userRepository: IUserRepository) {}
+    constructor(private readonly userRepository: IUserRepository) {}
 
-    async execute(data: CreateUserDTO) {
+    async execute(data: UserCreateDTO) {
         const userAlreadyExists = await this.userRepository.findByEmail(data.email);
 
         if (userAlreadyExists) {
@@ -21,10 +21,7 @@ export class CreateUserService {
             password: hashedPassword
         });
 
-        // return user;
-        const { password, ...userWithoutPassword} = user;
-
-        return userWithoutPassword;
+        return user;
     }
 
 }

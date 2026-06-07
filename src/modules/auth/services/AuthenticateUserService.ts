@@ -2,12 +2,14 @@ import { IUserRepository } from "../../users/repositories/IUserRepository";
 import { AuthenticateUserDTO } from "../schemas/authenticateUser.schema";
 import { AppError } from "../../../shared/errors/AppError";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { env } from "../../../shared/config/env";
+import { generateAccessToken } from "../strategies/generateAccessToken";
+import { generateRefreshToken } from "../strategies/generateRefreshToken";
+import { prisma } from "../../../shared/database/prisma";
+import { addDays } from "date-fns";
 
 
 export class AuthenticateUserService {
-    constructor(private userRepository: IUserRepository) {}
+    constructor(private readonly userRepository: IUserRepository) {}
 
     async execute(data: AuthenticateUserDTO) {
         const user = await this.userRepository.findByEmail(data.email);
@@ -22,18 +24,18 @@ export class AuthenticateUserService {
             throw new AppError("Invalid credentials", 401);
         }
 
-        const token = jwt.sign(
-            {
-                sub: user.id,
-                role: user.role,
-            },
-            env.JWT_SECRET,
-            {
-                expiresIn: "15m",
-            }
-        );
+        const accessToken = generateAccessToken({ id: user.id, role: user.role })
+        const refreshToken = generateRefreshToken(user.id)
 
-        return { token };
+        await prisma.refreshToken.create({
+            data: {
+                token: refreshToken,
+                userId: user.id,
+                expiresAt: addDays(new Date(), 7),
+            }
+        })
+
+        return { accessToken, refreshToken };
 
     }
 }

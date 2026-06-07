@@ -15,7 +15,22 @@ services:
       - "5432:5432"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata_dev:/var/lib/postgresql/data
+
+
+  postgres-test:
+    image: postgres:17
+    container_name: 3d_store_test
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: 3d_store_test_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_test:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  pgdata_dev:
+  pgdata_test:

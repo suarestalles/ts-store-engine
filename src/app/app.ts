@@ -6,6 +6,13 @@ export const app = Fastify({
   logger: true
 });
 
-app.setErrorHandler(errorHandler);
+export async function buildApp() {
+  app.setErrorHandler(errorHandler);
 
-app.register(registerRoutes);
+  app.register(registerRoutes);
+
+  await app.ready();
+
+  return app;
+
+}
