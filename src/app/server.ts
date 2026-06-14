@@ -1,8 +1,10 @@
 import { env } from "../shared/config/env";
-import { app } from "./app";
+import { buildApp } from "./app";
 
 const start = async () => {
   try {
+
+    const app = await buildApp();
     await app.listen({
       port: env.PORT,
       host: "0.0.0.0"
@@ -10,7 +12,7 @@ const start = async () => {
 
     console.log("Server running");
   } catch (error) {
-    app.log.error(error);
+    console.error(error);
     process.exit(1);
   }
 };

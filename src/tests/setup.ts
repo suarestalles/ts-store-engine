@@ -7,6 +7,7 @@ beforeAll(async () => {
 beforeEach(async () => {
     await prisma.refreshToken.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.category.deleteMany();
 })
 
 afterAll(async () => {
@@ -16,4 +17,5 @@ afterAll(async () => {
 export async function clearDataBase() {
     await prisma.refreshToken.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.category.deleteMany();
 }
