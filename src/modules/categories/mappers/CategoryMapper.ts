@@ -6,7 +6,8 @@ export class CategoryMapper {
             id: category.id,
             name: category.name,
             createdAt: category.createdAt,
-            dupatedAt: category.updatedAt,
+            updatedAt: category.updatedAt,
+            
         }
     }
 }

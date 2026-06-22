@@ -2,10 +2,15 @@ import { IUserRepository } from "../repositories/IUserRepository";
 import { UserCreateDTO }  from "../dtos/UserCreateDTO";
 import { AppError } from "../../../shared/errors/AppError";
 import bcrypt from "bcrypt";
+import { createCustomerSchema } from "../../customers/schemas/createCustomer.schema";
+import { ICustomerRepository } from "../../customers/repositories/ICustomerRepository";
 
 export class CreateUserService {
 
-    constructor(private readonly userRepository: IUserRepository) {}
+    constructor(
+        private readonly userRepository: IUserRepository,
+        private readonly customerRepository: ICustomerRepository,
+    ) {}
 
     async execute(data: UserCreateDTO) {
         const userAlreadyExists = await this.userRepository.findByEmail(data.email);
@@ -19,6 +24,13 @@ export class CreateUserService {
         const user = await this.userRepository.create({
             ...data,
             password: hashedPassword
+        });
+
+        const customerData = createCustomerSchema.parse(data);
+
+        await this.customerRepository.create({
+            ...customerData,
+            userId: user.id,
         });
 
         return user;
