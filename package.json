@@ -21,13 +21,15 @@
     "dev": "tsx watch src/app/server.ts"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^11.2.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
     "date-fns": "^4.4.0",
-    "fastify": "^4.29.1",
+    "fastify": "^5.8.5",
     "jsonwebtoken": "^9.0.3",
     "prisma": "^6.19.3",
     "reflect-metadata": "^0.2.2",

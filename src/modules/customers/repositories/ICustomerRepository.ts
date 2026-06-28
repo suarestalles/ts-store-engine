@@ -2,7 +2,7 @@ import { Customer } from "@prisma/client";
 import { CustomerCreateDTO } from "../dtos/CustomerCreateDTO";
 
 export interface ICustomerRepository {
-    create(data: CustomerCreateDTO): Promise<Customer>;
+    create(data: {}): Promise<Customer>;
 
     findById(id: string): Promise<Customer | null>;
 

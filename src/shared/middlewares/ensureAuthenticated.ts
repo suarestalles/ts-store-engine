@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyRequest } from "fastify";
 import { AppError } from "../errors/AppError";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
@@ -8,14 +8,8 @@ type JWTPayload = {
     role: string;
 }
 
-export async function ensureAuthenticated(request: FastifyRequest, reply: FastifyReply) {
-    const authHeader = request.headers.authorization;
-
-    if (!authHeader) {
-        throw new AppError("Token Missing", 401);
-    }
-    
-    const [, token] = authHeader.split(" ");
+export async function ensureAuthenticated(request: FastifyRequest) {
+    const token = request.cookies.accessToken;
     
     if (!token) {
         throw new AppError("Token Missing", 401);

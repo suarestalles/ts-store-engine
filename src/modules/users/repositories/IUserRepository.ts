@@ -3,7 +3,7 @@ import { UserCreateDTO } from "../dtos/UserCreateDTO";
 import { UserUpdateDTO } from "../dtos/UserUpdateDTO";
 
 export interface IUserRepository {
-    create(data: UserCreateDTO): Promise<User>;
+    create(data: {}): Promise<User>;
 
     findByEmail(email: string): Promise<User | null>;
 

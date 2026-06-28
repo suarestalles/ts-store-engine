@@ -6,10 +6,14 @@ import { generateAccessToken } from "../strategies/generateAccessToken";
 import { generateRefreshToken } from "../strategies/generateRefreshToken";
 import { prisma } from "../../../shared/database/prisma";
 import { addDays } from "date-fns";
+import { IRefreshTokenRepository } from "../repositories/IRefreshTokenRepository";
 
 
 export class AuthenticateUserService {
-    constructor(private readonly userRepository: IUserRepository) {}
+    constructor(
+        private readonly authRepository: IRefreshTokenRepository,
+        private readonly userRepository: IUserRepository
+    ) {}
 
     async execute(data: AuthenticateUserDTO) {
         const user = await this.userRepository.findByEmail(data.email);
@@ -26,16 +30,22 @@ export class AuthenticateUserService {
 
         const accessToken = generateAccessToken({ id: user.id, role: user.role })
         const refreshToken = generateRefreshToken(user.id)
+        
+        const refreshed = await this.authRepository.findByToken(refreshToken);
 
-        await prisma.refreshToken.create({
-            data: {
+        if (refreshed) {
+            throw new AppError("Refresh Token already exists", 409)
+        }
+
+        await prisma.$transaction(async (tx) => {
+            await this.authRepository.create({
                 token: refreshToken,
                 userId: user.id,
                 expiresAt: addDays(new Date(), 7),
-            }
+            })
         })
 
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken, user };
 
     }
 }

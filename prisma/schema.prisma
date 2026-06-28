@@ -15,8 +15,8 @@ model User {
   role          Role           @default(USER)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  customer      Customer?
   refreshTokens RefreshToken[]
-  customer Customer?
 }
 
 model RefreshToken {
@@ -63,19 +63,17 @@ model ProductImage {
 }
 
 model Customer {
-  id          String         @id @default(uuid())
+  id          String   @id @default(uuid())
+  phone       String
+  address     String
+  totalOrders Int      @default(0)
+  totalSpent  Float    @default(0)
+  createdAt   DateTime @default(now())
+  userId      String   @unique
+  updatedAt   DateTime @updatedAt
+  email       String   @unique
   name        String
-  email         String         @unique
-  phone String
-  address String
-  totalOrders Int @default(0)
-  totalSpent Float @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

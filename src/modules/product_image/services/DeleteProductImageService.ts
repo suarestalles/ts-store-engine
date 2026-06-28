@@ -1,9 +1,9 @@
 import { AppError } from "../../../shared/errors/AppError";
-import { IProductImageRepository } from "../repositories/IProductImageRepository";
+import { IProductRepository } from "../../products/repositories/IProductRepository";
 
 export class DeleteProductImageService {
 
-    constructor(private readonly repository: IProductImageRepository) {};
+    constructor(private readonly repository: IProductRepository) {};
 
     async execute(id: string) {
         const productImage = await this.repository.findById(id);

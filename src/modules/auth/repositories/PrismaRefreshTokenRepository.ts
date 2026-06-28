@@ -1,11 +1,15 @@
-import { RefreshToken } from "@prisma/client";
+import { Prisma, PrismaClient, RefreshToken } from "@prisma/client";
 import { prisma } from "../../../shared/database/prisma";
 import { IRefreshTokenRepository } from "./IRefreshTokenRepository";
 
+type PrismaExecutor = PrismaClient | Prisma.TransactionClient;
+
 export class PrismaRefreshTokenRepository implements IRefreshTokenRepository{
 
+    constructor(private readonly db: PrismaExecutor = prisma) {}
+
     async findByToken(token: string): Promise<RefreshToken | null> {
-        return prisma.refreshToken.findUnique({
+        return this.db.refreshToken.findUnique({
             where: { token }
         })
     }
@@ -18,17 +22,17 @@ export class PrismaRefreshTokenRepository implements IRefreshTokenRepository{
         ipAddress?: string;
         userAgent?: string;
     }): Promise<RefreshToken> {
-        return prisma.refreshToken.create({ data: tokenData })
+        return this.db.refreshToken.create({ data: tokenData })
     }
 
     async deleteByToken(token: string): Promise<void> {
-        await prisma.refreshToken.delete({
+        await this.db.refreshToken.delete({
             where: { token }
         })
     }
 
     async deleteByUserId(userId: string): Promise<void> {
-        await prisma.refreshToken.deleteMany({
+        await this.db.refreshToken.deleteMany({
             where: { userId }
         })
     }
