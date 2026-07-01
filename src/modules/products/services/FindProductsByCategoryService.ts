@@ -14,8 +14,6 @@ export class FindProductsByCategoryService {
 
     async execute({categoryId, page, limit}: IRequest) {
 
-        console.log(limit)
-
         const [products, total] = await Promise.all([
             this.repository.findByCategory({ categoryId, page, limit }),
             this.repository.countByCategory({ categoryId, page, limit }),
