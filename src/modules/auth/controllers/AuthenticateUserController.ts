@@ -15,10 +15,8 @@ export class AuthenticateUserController {
         
         const result = await service.execute(body);
 
-        const { accessToken, refreshToken, user } = await service.execute(body);
-
         reply.setCookie(
-            "accessToken", accessToken, {
+            "accessToken", result.accessToken, {
                 httpOnly: true,
                 sameSite: "lax",
                 secure: process.env.NODE_ENV === "production",
@@ -26,7 +24,7 @@ export class AuthenticateUserController {
                 maxAge: 60 * 15,
             }
         ).setCookie(
-            "refreshToken", refreshToken, {
+            "refreshToken", result.refreshToken, {
                 httpOnly: true,
                 sameSite: "lax",
                 secure: process.env.NODE_ENV == "production",
@@ -34,7 +32,7 @@ export class AuthenticateUserController {
                 maxAge: 60 * 15,
             }
         ).setCookie(
-            "user", JSON.stringify(user), {
+            "uid", result.user.id, {
                 httpOnly: true,
                 sameSite: "lax",
                 secure: process.env.NODE_ENV == "production",
@@ -43,11 +41,9 @@ export class AuthenticateUserController {
         );
 
         return reply.send({
-            user: {
-                id: result.user.id,
-                email: result.user.email,
-                role: result.user.role,
-            }
+            id: result.user.id,
+            email: result.user.email,
+            role: result.user.role,
         })
     }
 

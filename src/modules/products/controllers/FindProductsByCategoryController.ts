@@ -7,12 +7,13 @@ export class FindProductsByCategoryController {
 
     async handle(request: FastifyRequest, reply: FastifyReply) {
 
-        const query = await findProductsByCategorySchema.parse(request.query);
+        const query = findProductsByCategorySchema.parse(request.query);
+        const { categoryId } = request.params as { categoryId: string }
 
         const repository = new PrismaProductRepository();
         const service = new FindProductsByCategoryService(repository);
 
-        const result = await service.execute(query);
+        const result = await service.execute({...query, categoryId});
 
         return reply.send(result);
     }

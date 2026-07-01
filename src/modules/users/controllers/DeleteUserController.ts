@@ -4,8 +4,8 @@ import { DeleteUserService } from "../services/DeleteUserService";
 
 
 export class DeleteUserController {
-    async handler(request: FastifyRequest, reply: FastifyReply) {
-        const { id } = request.params as { id: string };
+    async handle(request: FastifyRequest, reply: FastifyReply) {
+        const id = request.user?.id ?? '';
 
         const repository = new PrismaUserRepository();
         const service = new DeleteUserService(repository);

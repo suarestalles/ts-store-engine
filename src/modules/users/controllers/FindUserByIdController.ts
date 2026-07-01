@@ -5,7 +5,7 @@ import { FindUserByIdService } from "../services/FindUserByIdService";
 export class FindUserByIdController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
         
-        const { id } = request.params as { id: string };
+        const id = request.user?.id ?? '';
 
         const repository = new PrismaUserRepository();
         const service = new FindUserByIdService(repository);

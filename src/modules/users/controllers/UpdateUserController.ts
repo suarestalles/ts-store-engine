@@ -4,7 +4,7 @@ import { PrismaUserRepository } from "../repositories/PrismaUserRepository";
 import { UpdateUserService } from "../services/UpdateUserService";
 
 export class UpdateUserController {
-    async handler(request: FastifyRequest, reply: FastifyReply) {
+    async handle(request: FastifyRequest, reply: FastifyReply) {
 
         const { id } = request.params as { id: string };
         const body = updateUserSchema.parse(request.body);

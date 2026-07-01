@@ -17,6 +17,10 @@ export class PrismaCustomerRepository implements ICustomerRepository {
         return this.db.customer.findUnique({ where: { id } });
     }
 
+    async findByUserId(userId: string): Promise<Customer | null> {
+        return this.db.customer.findUnique({ where: { userId } });
+    }
+
     async findMany({page, limit}: { page: number, limit: number }): Promise<Customer[]> {
         return this.db.customer.findMany({
             skip: (page - 1) * limit,

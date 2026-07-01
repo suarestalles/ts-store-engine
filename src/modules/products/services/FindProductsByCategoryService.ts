@@ -1,3 +1,4 @@
+import { ProductImage } from "@prisma/client";
 import { ProductMapper } from "../mappers/ProductMapper";
 import { IProductRepository } from "../repositories/IProductRepository";
 
@@ -13,10 +14,14 @@ export class FindProductsByCategoryService {
 
     async execute({categoryId, page, limit}: IRequest) {
 
+        console.log(limit)
+
         const [products, total] = await Promise.all([
             this.repository.findByCategory({ categoryId, page, limit }),
             this.repository.countByCategory({ categoryId, page, limit }),
         ]);
+
+        products.map(product => product.images=[{url: "https://radiantbr.com/cdn/shop/files/AbajurGrandeModernoMinimalistaRadiant_9.webp?v=1748635582&width=1024"} as ProductImage])
 
         return {
             data: products.map(product => ProductMapper.toResponse(product)),

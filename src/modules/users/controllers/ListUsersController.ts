@@ -5,7 +5,7 @@ import { ListUserService } from "../services/ListUserService";
 
 export class ListUsersController {
 
-    async handler(request: FastifyRequest, reply: FastifyReply) {
+    async handle(request: FastifyRequest, reply: FastifyReply) {
         const query = await listUsersSchema.parse(request.query);
 
         const repository = new PrismaUserRepository();

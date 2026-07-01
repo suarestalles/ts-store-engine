@@ -26,7 +26,7 @@ export async function categoryRoutes(app: FastifyInstance) {
         return await findCategoryByIdController.handler(request, reply);
     })
 
-    app.get("/categories", {preHandler: [ensureAuthenticated]}, async (request, reply) => {
+    app.get("/categories", async (request, reply) => {
         return await listCategoryController.handler(request, reply);
     })
 
